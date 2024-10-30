@@ -1,10 +1,230 @@
-<html>
-  <head>
-    <title>
-      My Project
-    </title>
-  </head>
-  <body>
-    <h1> My Project </h1>
-  </body>
-</html>
+```
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn import svm
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
+from imblearn.over_sampling import SMOTE
+
+# Load the data from the CSV file
+parkinsons_data = pd.read_csv('/content/parkinsons.csv')
+
+# Select only the specified features and target
+selected_features = ['MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)',
+                     'MDVP:Jitter(%)', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)',
+                     'MDVP:APQ', 'NHR', 'status']
+parkinsons_data = parkinsons_data[selected_features]
+
+# Separating the features and target
+X = parkinsons_data.drop(columns=['status'], axis=1)
+Y = parkinsons_data['status']
+
+# Using SMOTE to handle class imbalance
+smote = SMOTE(random_state=2)
+X, Y = smote.fit_resample(X, Y)
+
+# Splitting the data into training and testing sets
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.25, random_state=2)
+
+# Feature scaling - standardize all features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Applying PCA for dimensionality reduction
+pca = PCA(n_components=5)  # Keep more components to retain variance
+X_train_pca = pca.fit_transform(X_train)
+X_test_pca = pca.transform(X_test)
+
+# Hyperparameter tuning for Random Forest
+rf_model = RandomForestClassifier(random_state=2)
+param_grid_rf = {
+    'n_estimators': [100, 200, 300],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10],
+}
+grid_search_rf = GridSearchCV(estimator=rf_model, param_grid=param_grid_rf, cv=5, scoring='accuracy')
+grid_search_rf.fit(X_train_pca, Y_train)
+best_rf_model = grid_search_rf.best_estimator_
+
+# Hyperparameter tuning for SVM
+svm_model = svm.SVC(probability=True)
+param_grid_svm = {
+    'C': [0.1, 1, 10, 100],
+    'kernel': ['linear', 'rbf', 'poly'],
+}
+grid_search_svm = GridSearchCV(estimator=svm_model, param_grid=param_grid_svm, cv=5, scoring='accuracy')
+grid_search_svm.fit(X_train_pca, Y_train)
+best_svm_model = grid_search_svm.best_estimator_
+
+# Training and scoring for Random Forest
+best_rf_model.fit(X_train_pca, Y_train)
+rf_train_accuracy = best_rf_model.score(X_train_pca, Y_train)
+rf_test_accuracy = best_rf_model.score(X_test_pca, Y_test)
+
+# Training and scoring for SVM
+best_svm_model.fit(X_train_pca, Y_train)
+svm_train_accuracy = best_svm_model.score(X_train_pca, Y_train)
+svm_test_accuracy = best_svm_model.score(X_test_pca, Y_test)
+
+# Print individual model accuracies
+print(f"Random Forest Training Accuracy: {rf_train_accuracy:.2f}")
+print(f"Random Forest Testing Accuracy: {rf_test_accuracy:.2f}")
+print(f"SVM Training Accuracy: {svm_train_accuracy:.2f}")
+print(f"SVM Testing Accuracy: {svm_test_accuracy:.2f}")
+
+# Hybrid model using voting classifier
+hybrid_model = VotingClassifier(estimators=[
+    ('svm', best_svm_model),
+    ('rf', best_rf_model)
+], voting='soft')
+
+# Training the hybrid model on the training data
+hybrid_model.fit(X_train_pca, Y_train)
+
+# Prediction and evaluation for the hybrid model
+hybrid_train_accuracy = hybrid_model.score(X_train_pca, Y_train)
+hybrid_test_accuracy = hybrid_model.score(X_test_pca, Y_test)
+
+print(f"Hybrid Model Training Accuracy: {hybrid_train_accuracy:.2f}")
+print(f"Hybrid Model Testing Accuracy: {hybrid_test_accuracy:.2f}")
+# Hybrid Model Training Metrics
+print("\nHybrid Model Training Metrics:")
+print("Train Confusion Matrix:\n", train_conf_matrix_hybrid)
+print("Train Precision:", hybrid_train_precision)
+print("Train Recall:", hybrid_train_recall)
+print("Train F1 Score:", hybrid_train_f1)
+
+# Hybrid Model Test Metrics
+print("\nHybrid Model Test Metrics:")
+print("Test Confusion Matrix:\n", test_conf_matrix_hybrid)
+print("Test Precision:", hybrid_test_precision)
+print("Test Recall:", hybrid_test_recall)
+print("Test F1 Score:", hybrid_test_f1)
+
+
+# Input data for another person without Parkinson's disease
+input_data = (
+    205.12,  # MDVP:Fo(Hz)
+    215.65,  # MDVP:Fhi(Hz)
+    198.48,  # MDVP:Flo(Hz)
+    0.00268, # MDVP:Jitter(%)
+    0.01156, # MDVP:Shimmer
+    0.095,   # MDVP:Shimmer(dB)
+    0.00712, # MDVP:APQ
+    0.00328  # NHR
+)
+
+# Changing input data to a numpy array
+input_data_as_numpy_array = np.asarray(input_data)
+
+# Reshape the numpy array
+input_data_reshaped = input_data_as_numpy_array.reshape(1, -1)
+
+# Standardize the input data
+std_data = scaler.transform(input_data_reshaped)
+
+# Applying PCA to input data (ensure your PCA model is fitted before this step)
+input_data_pca = pca.transform(std_data)
+
+# Prediction using the hybrid model
+prediction = hybrid_model.predict(input_data_pca)
+
+# Debugging output for the prediction
+print(f"Input Data: {input_data}")
+print(f"PCA Transformed Input Data: {input_data_pca}")
+print(f"Prediction: {prediction}")
+
+# Adjusted output for the prediction
+if prediction[0] == 0:
+    print("The person does not have Parkinson's Disease.")
+else:
+    print("The person has Parkinson's Disease.")
+
+# Confusion Matrix, Precision, Recall, and F1 Score for train and test data
+y_train_pred_rf = best_rf_model.predict(X_train_pca)
+y_test_pred_rf = best_rf_model.predict(X_test_pca)
+
+y_train_pred_svm = best_svm_model.predict(X_train_pca)
+y_test_pred_svm = best_svm_model.predict(X_test_pca)
+
+y_train_pred_hybrid = hybrid_model.predict(X_train_pca)
+y_test_pred_hybrid = hybrid_model.predict(X_test_pca)
+
+# Confusion Matrix for train and test data
+train_conf_matrix_rf = confusion_matrix(Y_train, y_train_pred_rf)
+test_conf_matrix_rf = confusion_matrix(Y_test, y_test_pred_rf)
+
+train_conf_matrix_svm = confusion_matrix(Y_train, y_train_pred_svm)
+test_conf_matrix_svm = confusion_matrix(Y_test, y_test_pred_svm)
+
+train_conf_matrix_hybrid = confusion_matrix(Y_train, y_train_pred_hybrid)
+test_conf_matrix_hybrid = confusion_matrix(Y_test, y_test_pred_hybrid)
+
+# Precision, Recall, and F1 Score for RF
+rf_train_precision = precision_score(Y_train, y_train_pred_rf)
+rf_train_recall = recall_score(Y_train, y_train_pred_rf)
+rf_train_f1 = f1_score(Y_train, y_train_pred_rf)
+
+rf_test_precision = precision_score(Y_test, y_test_pred_rf)
+rf_test_recall = recall_score(Y_test, y_test_pred_rf)
+rf_test_f1 = f1_score(Y_test, y_test_pred_rf)
+
+# Precision, Recall, and F1 Score for SVM
+svm_train_precision = precision_score(Y_train, y_train_pred_svm)
+svm_train_recall = recall_score(Y_train, y_train_pred_svm)
+svm_train_f1 = f1_score(Y_train, y_train_pred_svm)
+
+svm_test_precision = precision_score(Y_test, y_test_pred_svm)
+svm_test_recall = recall_score(Y_test, y_test_pred_svm)
+svm_test_f1 = f1_score(Y_test, y_test_pred_svm)
+
+# Precision, Recall, and F1 Score for Hybrid Model
+hybrid_train_precision = precision_score(Y_train, y_train_pred_hybrid)
+hybrid_train_recall = recall_score(Y_train, y_train_pred_hybrid)
+hybrid_train_f1 = f1_score(Y_train, y_train_pred_hybrid)
+
+hybrid_test_precision = precision_score(Y_test, y_test_pred_hybrid)
+hybrid_test_recall = recall_score(Y_test, y_test_pred_hybrid)
+hybrid_test_f1 = f1_score(Y_test, y_test_pred_hybrid)
+
+# Print metrics for Random Forest
+print("\nRandom Forest Metrics:")
+print("Train Confusion Matrix:\n", train_conf_matrix_rf)
+print("Train Precision:", rf_train_precision)
+print("Train Recall:", rf_train_recall)
+print("Train F1 Score:", rf_train_f1)
+
+print("\nTest Confusion Matrix:\n", test_conf_matrix_rf)
+print("Test Precision:", rf_test_precision)
+print("Test Recall:", rf_test_recall)
+print("Test F1 Score:", rf_test_f1)
+
+# Print metrics for SVM
+print("\nSVM Metrics:")
+print("Train Confusion Matrix:\n", train_conf_matrix_svm)
+print("Train Precision:", svm_train_precision)
+print("Train Recall:", svm_train_recall)
+
+# SVM Test Metrics
+print("\nSVM Test Metrics:")
+print("Test Confusion Matrix:\n", test_conf_matrix_svm)
+print("Test Precision:", svm_test_precision)
+print("Test Recall:", svm_test_recall)
+print("Test F1 Score:", svm_test_f1)
+
+import pickle
+# Train the hybrid model
+hybrid_model.fit(X_train, Y_train)
+
+# Save the trained model to a .sav file
+model_filename = 'parkinsons_hybrid_model.sav'
+pickle.dump(hybrid_model, open(model_filename, 'wb'))
+
+print(f"Model saved as {model_filename}")
+with open('scaler.sav', 'wb') as scaler_file:
+    pickle.dump(scaler, scaler_file)
+```
