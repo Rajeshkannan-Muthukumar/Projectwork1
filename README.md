@@ -19,14 +19,12 @@ Version Control: Implementation of Git for collaborative development and effecti
 IDE: Use of VSCode or Jupyter notebook as the Integrated Development Environment for coding, debugging, and version control integration.
 Additional Dependencies: Matplotlib and Seaborn for data visualization, joblib for model persistence, and Streamlit for application deployment.
 ### System Architecture
-1
 
 ### Output
 Output1 - Person is Positive for Parkinson Disease
-2
 
 Output2 - Person is Negative for Parkinson Disease
-3
+
 
 Detection Accuracy: 92%
 
