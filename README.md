@@ -1,59 +1,63 @@
-## Title of the Project
-Small description about the project like one below
-The integration of a chatbot within a hostel booking system, aimed at streamlining the reservation process for students and improving the overall user experience.
+### Title of the Project
+A Parkinson’s disease prediction system using a hybrid SVM-Random Forest model with SMOTE and PCA for enhanced early detection accuracy.
 
-## About
-<!--Detailed Description about the project-->
-Tailored Chatbot for Hostel Booking System is a project designed to integrate a chatbot that leverages advanced natural language processing techniques to understand and respond to user queries to the hostel booking system. Traditional hostel booking processes are often time-consuming and involve manual searches and extensive communication with hostel staff. This project seeks to overcome these challenges by creating an easy-to-use chatbot interface that assists students in addressing inquiries.
+### About
+A Parkinson’s disease prediction system utilizing a hybrid machine learning model, combining Support Vector Machine (SVM) and Random Forest classifiers, aimed at enhancing diagnostic accuracy. This system leverages data preprocessing techniques, such as Synthetic Minority Over-sampling Technique (SMOTE) and Principal Component Analysis (PCA), to improve model performance and identify key patterns in patient data, providing a reliable tool for early detection and support in clinical decision-making.
 
-## Features
-<!--List the features of the project as shown below-->
-- Implements advance neural network method.
-- A framework based application for deployment purpose.
-- High scalability.
-- Less time complexity.
-- A specific scope of Chatbot response model, using json data format.
+### Features
+Hybrid model combining SVM and Random Forest for accurate predictions.
+Advanced data preprocessing using SMOTE and PCA to improve model performance.
+High test accuracy aimed for reliable early detection of Parkinson's disease.
+Scalable and adaptable for various clinical settings.
+User-friendly interface for efficient patient data input and result visualization.
+Requirements
+Operating System: Requires a 64-bit OS (Windows 10 or Ubuntu) for compatibility with deep learning frameworks.
+Development Environment: Python 3.8 or later for implementing the Parkinson’s disease prediction system.
+Machine Learning Libraries: Scikit-learn for model building, SMOTE for data balancing, PCA for dimensionality reduction.
+Data Processing Libraries: Pandas and NumPy for handling and preprocessing data.
+Version Control: Implementation of Git for collaborative development and effective code management.
+IDE: Use of VSCode or Jupyter notebook as the Integrated Development Environment for coding, debugging, and version control integration.
+Additional Dependencies: Matplotlib and Seaborn for data visualization, joblib for model persistence, and Streamlit for application deployment.
+### System Architecture
+1
 
-## Requirements
-<!--List the requirements of the project as shown below-->
-* Operating System: Requires a 64-bit OS (Windows 10 or Ubuntu) for compatibility with deep learning frameworks.
-* Development Environment: Python 3.6 or later is necessary for coding the sign language detection system.
-* Deep Learning Frameworks: TensorFlow for model training, MediaPipe for hand gesture recognition.
-* Image Processing Libraries: OpenCV is essential for efficient image processing and real-time hand gesture recognition.
-* Version Control: Implementation of Git for collaborative development and effective code management.
-* IDE: Use of VSCode as the Integrated Development Environment for coding, debugging, and version control integration.
-* Additional Dependencies: Includes scikit-learn, TensorFlow (versions 2.4.1), TensorFlow GPU, OpenCV, and Mediapipe for deep learning tasks.
+### Output
+Output1 - Person is Positive for Parkinson Disease
+2
 
-## System Architecture
-<!--Embed the system architecture diagram as shown below-->
+Output2 - Person is Negative for Parkinson Disease
+3
 
-![Screenshot 2023-11-25 133637](https://github.com/<<yourusername>>/Hand-Gesture-Recognition-System/assets/75235455/a60c11f3-0a11-47fb-ac89-755d5f45c995)
+Detection Accuracy: 92%
 
+Note: These metrics are customizable and should be tailored to reflect actual performance evaluations and project requirements for best results.
 
-## Output
+### Results and Impact
+The Parkinson’s Disease Prediction System offers an effective tool for early diagnosis, aiding healthcare professionals in making timely clinical decisions. With its high accuracy and advanced data processing techniques, this project has the potential to improve patient outcomes and support proactive treatment strategies.
 
-<!--Embed the Output picture at respective places as shown below as shown below-->
-#### Output1 - Name of the output
+This system contributes to advancements in healthcare technology and serves as a foundation for future predictive models, promoting early intervention and enhancing quality of life for individuals at risk of Parkinson’s disease.
 
-![Screenshot 2023-11-25 134037](https://github.com/<<yourusername>>/Hand-Gesture-Recognition-System/assets/75235455/8c2b6b5c-5ed2-4ec4-b18e-5b6625402c16)
+### Articles published / References
+Vaishnavi, "SVM-based approach for Parkinson's detection using vocal data," International Research Journal of Modernization in Engineering Technology and Science, vol. 5, no. 5, 2023.
 
-#### Output2 - Name of the output
-![Screenshot 2023-11-25 134253](https://github.com/<<yourusername>>/Hand-Gesture-Recognition-System/assets/75235455/5e05c981-05ca-4aaa-aea2-d918dcf25cb7)
+Doneti Sowmya, Dodla Kavya, J. Rashmitha, Satheesh Kumar V., and Preethi Jeevan, "Parkinson’s Disease Detection By Machine Learning Using SVM," International Research Journal of Engineering and Technology (IRJET), vol. 10, no. 01, pp. 1097. e-ISSN: 2395-0056, p-ISSN: 2395-0072, 2023.
 
-Detection Accuracy: 96.7%
-Note: These metrics can be customized based on your actual performance evaluations.
+J. Mei, C. Desrosiers, and J. Frasnelli, "Machine Learning for the Diagnosis of Parkinson’s Disease: A Review of Literature," Frontiers in Aging Neuroscience, vol. 13, no. 633752, pp. 1–13, 2021
 
+S. Haller, S. Badoud, D. Nguyen, V. Garibotto, K.O. Lovblad, P.R. Burkhard, "Individual Detection of Patients with Parkinson Disease using Support Vector Machine Analysis of Diffusion Tensor Imaging Data: Initial Results," AJNR Am J Neuroradiol, vol. 33, no. 11, pp. 2123-2128, 2012
 
-## Results and Impact
-<!--Give the results and impact as shown below-->
-The Sign Language Detection System enhances accessibility for individuals with hearing and speech impairments, providing a valuable tool for inclusive communication. The project's integration of computer vision and deep learning showcases its potential for intuitive and interactive human-computer interaction.
+W. A. Mir, D. R. Rizvi, I. Nissar, S. Masood, Izharuddin, and A. Hussain, "Deep Learning based model for the detection of Parkinson's disease using voice data," in 2022 First International Conference on Artificial Intelligence Trends and Pattern Recognition (ICAITPR), 2022, DOI: 10.1109/ICAITPR51569.2022.9844185
 
-This project serves as a foundation for future developments in assistive technologies and contributes to creating a more inclusive and accessible digital environment.
+C. K. Gomathy, B. Dheeraj Kumar Reddy, B. Varsha, and B. Varshini, "The Parkinson's Disease Detection Using Machine Learning Techniques," International Research Journal of Engineering and Technology (IRJET), vol. 08, no. 10, pp. 440-444, 2021.
 
-## Articles published / References
-1. N. S. Gupta, S. K. Rout, S. Barik, R. R. Kalangi, and B. Swampa, “Enhancing Heart Disease Prediction Accuracy Through Hybrid Machine Learning Methods ”, EAI Endorsed Trans IoT, vol. 10, Mar. 2024.
-2. A. A. BIN ZAINUDDIN, “Enhancing IoT Security: A Synergy of Machine Learning, Artificial Intelligence, and Blockchain”, Data Science Insights, vol. 2, no. 1, Feb. 2024.
+V. Balu, M. Varsha Reddy, and Y. V. Leelaprasad Reddy, "Detecting Parkinson's Disease," International Research Journal of Modernization in Engineering Technology and Science, vol. 04, no. 03, pp. 1420-1424, 2022
 
+Govindu, Aditi et al., "Parkinson's Disease Classification using Vowel Phonation and Machine Learning," Procedia Computer Science, vol. 218, pp. 249-261, 2023
 
+Hayder Mohammed Qasim, Oguz Ata, Mohammad Azam Ansari, Mohammad N. Alomary, Saad Alghamdi, and Mazen Almehmadi, "Hybrid Feature Selection Framework for the Parkinson Imbalanced Dataset Prediction Problem," Medicina, vol. 57, no. 11, p. 1217, 2021
 
+K. Polat, "A Hybrid Approach to Parkinson Disease Classification using speech signal: The Combination of SMOTE and Random Forests," 2019 IEEE International Symposium on INnovations in Intelligent Systems and Applications (INISTA), pp. 1-5, 2019
 
+M. Pramanik, R. Pradhan, P. Nandy, A.K. Bhoi, and P. Barsocchi, "Machine Learning Methods with Decision Forests for Parkinson's Detection," Applied Sciences, vol. 11, no. 2, pp. 581, 2021
+
+L. Ali, A. Javeed, A. Noor, H. T. Rauf, S. Kadry, and A. H. Gandomi, "Parkinson’s disease detection based on features refinement through L1 regularized SVM and deep neural network," Scientific Reports, vol. 14, no. 1333, pp. 1-12, 2024
