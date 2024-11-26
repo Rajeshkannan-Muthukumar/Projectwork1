@@ -20,6 +20,74 @@ IDE: Use of VSCode or Jupyter notebook as the Integrated Development Environment
 Additional Dependencies: Matplotlib and Seaborn for data visualization, joblib for model persistence, and Streamlit for application deployment.
 ### Code
 ```
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn import svm
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, f1_score
+from imblearn.over_sampling import SMOTE
+
+# Load the data from the CSV file
+parkinsons_data = pd.read_csv('/content/parkinsons.csv')
+
+# Select only the specified features and target
+selected_features = ['MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)',
+                     'MDVP:Jitter(%)', 'MDVP:Shimmer', 'MDVP:Shimmer(dB)',
+                     'MDVP:APQ', 'NHR', 'status']
+parkinsons_data = parkinsons_data[selected_features]
+
+# Separating the features and target
+X = parkinsons_data.drop(columns=['status'], axis=1)
+Y = parkinsons_data['status']
+
+# Using SMOTE to handle class imbalance
+smote = SMOTE(random_state=2)
+X, Y = smote.fit_resample(X, Y)
+
+# Splitting the data into training and testing sets
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.25, random_state=2)
+
+# Feature scaling - standardize all features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Applying PCA for dimensionality reduction
+pca = PCA(n_components=5)  # Keep more components to retain variance
+X_train_pca = pca.fit_transform(X_train)
+X_test_pca = pca.transform(X_test)
+
+# Hyperparameter tuning for Random Forest
+rf_model = RandomForestClassifier(random_state=2)
+param_grid_rf = {
+    'n_estimators': [100, 200, 300],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10],
+}
+grid_search_rf = GridSearchCV(estimator=rf_model, param_grid=param_grid_rf, cv=5, scoring='accuracy')
+grid_search_rf.fit(X_train_pca, Y_train)
+best_rf_model = grid_search_rf.best_estimator_
+
+# Hyperparameter tuning for SVM
+svm_model = svm.SVC(probability=True)
+param_grid_svm = {
+    'C': [0.1, 1, 10, 100],
+    'kernel': ['linear', 'rbf', 'poly'],
+}
+grid_search_svm = GridSearchCV(estimator=svm_model, param_grid=param_grid_svm, cv=5, scoring='accuracy')
+grid_search_svm.fit(X_train_pca, Y_train)
+best_svm_model = grid_search_svm.best_estimator_
+
+# Training and scoring for Random Forest
+best_rf_model.fit(X_train_pca, Y_train)
+rf_train_accuracy = best_rf_model.score(X_train_pca, Y_train)
+rf_test_accuracy = best_rf_model.score(X_test_pca, Y_test)
+
+# Training and scoring for SVM
+best_svm_model.fit(X_train_pca, Y_train)
 svm_train_recall = recall_score(Y_train, y_train_pred_svm)
 svm_train_f1 = f1_score(Y_train, y_train_pred_svm)
 
