@@ -18,6 +18,61 @@ Data Processing Libraries: Pandas and NumPy for handling and preprocessing data.
 Version Control: Implementation of Git for collaborative development and effective code management.
 IDE: Use of VSCode or Jupyter notebook as the Integrated Development Environment for coding, debugging, and version control integration.
 Additional Dependencies: Matplotlib and Seaborn for data visualization, joblib for model persistence, and Streamlit for application deployment.
+### Code
+```
+svm_train_recall = recall_score(Y_train, y_train_pred_svm)
+svm_train_f1 = f1_score(Y_train, y_train_pred_svm)
+
+svm_test_precision = precision_score(Y_test, y_test_pred_svm)
+svm_test_recall = recall_score(Y_test, y_test_pred_svm)
+svm_test_f1 = f1_score(Y_test, y_test_pred_svm)
+
+# Precision, Recall, and F1 Score for Hybrid Model
+hybrid_train_precision = precision_score(Y_train, y_train_pred_hybrid)
+hybrid_train_recall = recall_score(Y_train, y_train_pred_hybrid)
+hybrid_train_f1 = f1_score(Y_train, y_train_pred_hybrid)
+
+hybrid_test_precision = precision_score(Y_test, y_test_pred_hybrid)
+hybrid_test_recall = recall_score(Y_test, y_test_pred_hybrid)
+hybrid_test_f1 = f1_score(Y_test, y_test_pred_hybrid)
+
+# Print metrics for Random Forest
+print("\nRandom Forest Metrics:")
+print("Train Confusion Matrix:\n", train_conf_matrix_rf)
+print("Train Precision:", rf_train_precision)
+print("Train Recall:", rf_train_recall)
+print("Train F1 Score:", rf_train_f1)
+
+print("\nTest Confusion Matrix:\n", test_conf_matrix_rf)
+print("Test Precision:", rf_test_precision)
+print("Test Recall:", rf_test_recall)
+print("Test F1 Score:", rf_test_f1)
+
+# Print metrics for SVM
+print("\nSVM Metrics:")
+print("Train Confusion Matrix:\n", train_conf_matrix_svm)
+print("Train Precision:", svm_train_precision)
+print("Train Recall:", svm_train_recall)
+
+# SVM Test Metrics
+print("\nSVM Test Metrics:")
+print("Test Confusion Matrix:\n", test_conf_matrix_svm)
+print("Test Precision:", svm_test_precision)
+print("Test Recall:", svm_test_recall)
+print("Test F1 Score:", svm_test_f1)
+
+import pickle
+# Train the hybrid model
+hybrid_model.fit(X_train, Y_train)
+
+# Save the trained model to a .sav file
+model_filename = 'parkinsons_hybrid_model.sav'
+pickle.dump(hybrid_model, open(model_filename, 'wb'))
+
+print(f"Model saved as {model_filename}")
+with open('scaler.sav', 'wb') as scaler_file:
+    pickle.dump(scaler, scaler_file)
+```
 ### System Architecture
 ![Architecture_diagram_Final](https://github.com/user-attachments/assets/3ae25f9a-3178-43bf-a4db-e58fc5efe077)
 
